@@ -1,31 +1,17 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import DocumentService from './DocumentService';
 import { withRouter } from 'react-router';
 import Button from 'react-bootstrap/Button'
 import Moment from 'react-moment';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import Icon from '@material-ui/core/Icon';
+import CurrencyFormat from 'react-currency-format';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-class TableRow extends Component {
-
-    deleteDocument = () => {
-        DocumentService.deleteApi('delete-document?id=' + this.props.obj._id)
-            .then(json => {
-                if (json.data.statusCode === 200) {
-                    alert('Record deleted successfully!!');
-                    this.props.history.push('/add-document')
-                }
-                else {
-                    alert('something went wrong!!');
-                    this.props.history.push('/index')
-                }
-            }).catch((error) => {
-                console.log("error-----------", error)
-            })
-    }
-
+class PoolTableData extends Component {
     render() {
         var perMonth = this.props.obj.costPerMonthTiempo;
         var perMonthCE = this.props.obj.costPerMonthCE;
@@ -33,30 +19,17 @@ class TableRow extends Component {
         const joinPool = this.props.obj.joinsPool;
         const leavePool = this.props.obj.leavesPool;
         return (
-
-            // {rows.map(row => (
-            //     <TableRow key={row.name}>
-            //     <TableCell component="th" scope="row">
-            //         {row.name}
-            //     </TableCell>
-            //     <TableCell align="center">{row.calories}</TableCell>
-            //     <TableCell align="center">{row.fat}</TableCell>
-            //     <TableCell align="center">{row.carbs}</TableCell>
-            //     <TableCell align="center">{row.protein}</TableCell>
-            //     </TableRow>
-            // ))}
-
-            <TableRow className="text-center d-flex">
-                <TableCell align="center">{this.props.obj.employeeId}</TableCell>{/* Id */}
+            <TableRow key={this.props.obj.name}>
+                <TableCell component="th" scope="row">{this.props.obj.employeeId}</TableCell>{/* Id */}
                 <TableCell align="center">{this.props.obj.name}</TableCell>{/* displayName */}
                 <TableCell align="center">{this.props.obj.status}</TableCell> {/* Status */}
                 <TableCell align="center">{this.props.obj.stack}</TableCell>{/* Stack */}
                 <TableCell align="center">{this.props.obj.level}</TableCell>{/* Level - Primary Skill */}
                 <TableCell align="center">{this.props.obj.location}</TableCell>{/* Location */}
                 <TableCell align="center">
-                    <Button variant="secondary">
-                        <Icon color="primary">addCircle</Icon>
-                    </Button>
+                <Fab color="primary" aria-label="add" size="small">
+                    <AddIcon />
+                </Fab>
                 </TableCell>{/* Known Techs and Tools */}
                 <TableCell align="center">{this.props.obj.currentProject}</TableCell>{/* Current Project */}
                 <TableCell align="center">{this.props.obj.potentialProject}</TableCell>{/* Potential Project */}
@@ -67,20 +40,25 @@ class TableRow extends Component {
                 <TableCell align="center">{this.props.obj.perCostCE}%</TableCell>{/* Percentage Cost CE */}
                 <TableCell align="center"><CurrencyFormat value={perMonthCE != null ? perMonthCE : "" } displayType={'text'} thousandSeparator={true} prefix={'$'} /></TableCell>{/* CE Monthly Cost */}
                 <TableCell align="center">{this.props.obj.source}</TableCell>{/* Source */}
-                <TableCell align="center"><textarea className="form-control" id="exampleFormControlTextarea1" rows="2">{this.props.obj.notes}</textarea></TableCell>{/* Notes */}
+                <TableCell align="center"><textarea className="form-control" rows="2" style={{ minWidth: 140 }} defaultValue={this.props.obj.notes} /></TableCell>{/* Notes */}
                 <TableCell align="center">{this.props.obj.active}</TableCell>{/* Active */}
                 <TableCell align="center">
-                    <Link to={"/edit-document/" + this.props.obj._id} className="btn btn-primary"></Link>
-                    {/* <Icon color="Primary">Edit</Icon> */}
-                </TableCell>
-                <TableCell>
-                    <form >
-                        <button type="button" /* onClick={this.deleteDocument} */ className="btn btn-danger">Inactivate</button>
-                    </form>
+                    <div>
+                    {/* <Link to={"/edit-document/" + this.props.obj.employee_id} className="btn btn-primary">Edit</Link> */}
+                    <Fab color="secondary" aria-label="edit" size="small">
+                        <EditIcon />
+                    </Fab>
+                    {/* <form > */}
+                    <Fab aria-label="delete" size="small">
+                        <DeleteIcon />
+                    </Fab>
+                        {/* <button type="button" onClick={this.deleteDocument} className="btn btn-danger">Inactivate</button> */}
+                    {/* </form> */}
+                    </div>
                 </TableCell>
             </TableRow>
-        );
+            );
+        }
     }
-}
-
-export default withRouter(TableRow);
+    
+    export default withRouter(PoolTableData);

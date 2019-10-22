@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import DocumentService from './DocumentService';
 import axios from 'axios';
-import TableRow from './TableRow';
 import NavSearch from './NavSearch';
-import { Link } from 'react-router-dom';
-import Table from 'react-bootstrap/Table'
-import Button from 'react-bootstrap/Button'
-
-let styles = {
-    marginTop: '20px'
-};
+import PoolTableHeader from './PoolTableHeader';
+import PoolTableData from './PoolTableData';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import Paper from '@material-ui/core/Paper';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
 
 class ListDocument extends Component {
 
@@ -20,7 +20,7 @@ class ListDocument extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/dashboard/employees?division=pool')
+        axios.get('http://localhost:8080/api/dashboard/pool/employees')
             .then(response => {
                 this.setState({ items: response.data });
             })
@@ -32,41 +32,29 @@ class ListDocument extends Component {
     tabRow() {
         if (this.state.items instanceof Array) {
             return this.state.items.map(function (object, i) {
-                return <TableRow obj={object} key={i} />;
+                return <PoolTableData obj={object} key={i} />;
             })
         }
     }
 
     render() {
         return (
-            <div className="container" style={styles}>
-                <NavSearch/>
-                <div className="top d-flex justify-content-center">
-                    <h3>List of Employees</h3><br/>
-                </div>
-                <Link to={"/add-document/"} ><Button>Add New Employee</Button></Link>
-                <div className="table d-flex justify-content-center sm">
-                    <Table bordered hover sm responsive >
-                        <thead>
-                            <tr class="text-center d-flex">
-                                <th class="col-1" scope="col">ID</th>
-                                <th class="col-2">Display Name</th>
-                                <th class="col-1">Primary Skill</th>
-                                <th class="col-2">Known Techs and Tools</th>
-                                <th class="col-2">Job Title</th>
-                                <th class="col-3" scope="col">Work Email</th>
-                                <th class="col-2">Department</th>
-                                <th class="col-2">Location</th>
-                                <th class="col-1">Division</th>
-                                <th class="col-2">Supervisor</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.tabRow()}
-                        </tbody>
-                    </Table>
-                </div>
-            </div>
+            <React.Fragment>
+                <CssBaseline />
+                <Container maxWidth="1024px">
+                    <NavSearch/>
+                    <Paper style={{ overflow: 'auto', height:'960px', maxWidth:'xl'}}>
+                        <Table className="minWidth: 650" aria-label="simple table">
+                            <TableHead>
+                                <PoolTableHeader />
+                            </TableHead>
+                            <TableBody>
+                                {this.tabRow()}
+                            </TableBody>
+                        </Table>
+                    </Paper>
+                </Container>
+            </React.Fragment>
         );
     }
 }

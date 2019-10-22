@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
+import logo from './image/tiempo_logo.jpg';
 
 class NavSearch extends Component {
     render() {
         return (
-            <nav class="navbar navbar-expand-lg navbar-light justify-content-between">
-            <h1>&nbsp;</h1>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"></input>
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            </nav>
+
+                <div className="card-body row no-gutters align-items-center">
+                    <div className="col">
+                        <img src={logo} width="120px" alt='icon' className="rounded float-left"/>
+                    </div>
+                    <div className="col-auto">
+                        <i className="fas fa-search h2 text-body"></i>
+                    </div>
+                    <div className="col">
+                        <input className="form-control form-control-md form-control-borderless" type="search" placeholder="Search employee" />
+                    </div>
+                    <div className="col-auto">
+                        <button className="btn btn-md btn-success" type="submit">Search</button>
+                    </div>
+                </div>
         );
     }
 }
